@@ -3,6 +3,8 @@
     cmake .
     make
     open Test.app
+    Improvement: put my current job in a function  (checked)
+    Create the info files (checked)
 */
  
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -26,18 +28,27 @@ public:
     MyFrame();
  
 private:
-    //Create events when they're clicked
+    //----------Clicked events -------------------
     void OnExit(wxCommandEvent& event);
     void OnButtonClick(wxCommandEvent& event);
+    void OnAboutClick(wxCommandEvent& event);
+
+    void frame_1(); //Function to allocate the text boxes and button
     wxTextCtrl * ivaCausadoTextBox;
     wxTextCtrl * ivaRetenidoTextBox;
     wxTextCtrl * resultTextBox;
     wxButton * calculateButton;
+    void top_menu_bar();
+    wxMenuBar *top_bar;
+    wxMenu* helpMenu;
 };
- 
+
+
+// --------Custom IDs--------- 
 enum
 {
-    ID_Hello = 1
+    ID_Hello = 1,
+    ID_About
 };
  
 wxIMPLEMENT_APP(MyApp);
@@ -49,9 +60,38 @@ bool MyApp::OnInit()
     frame->Show(true);
     return true;
 }
- 
-MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "RESICO Calculator"){ //Creates the main frame / window with the title
-    ////--------------------Sizer of the layout ---------------------------
+// ----------------------Principal frame --------------------
+MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "RESICO Calculator", wxPoint(), wxSize(250,300)){ //Creates the main frame / window with the title
+    top_menu_bar();
+    frame_1();
+
+}
+//Function to close the window 
+void MyFrame::OnExit(wxCommandEvent& event)
+{
+    Close(true);
+}
+void MyFrame::top_menu_bar(){
+    // Main menu bar 
+    top_bar = new wxMenuBar; // This is the principal menu bar 
+    // Items in the menu bar 
+    //wxMenu *top_menu = new wxMenu; //This are the sub menu of the principal menu bar 
+  
+    helpMenu = new wxMenu; // This is the menu of the sub menu 
+    top_bar ->Append(helpMenu, _T("&Help")); //I link the helpMenu that I just created with the principal menu bar
+    helpMenu ->Append(ID_About, _T("&About\tF1"), ""); //The second argument is the title that will show in the menu third argument will show a text in the status bar 
+    
+    SetMenuBar(top_bar);
+
+    Bind(wxEVT_MENU, &MyFrame::OnAboutClick,this);
+
+
+    CreateStatusBar();
+    SetStatusText("Created by Oscar Valles");
+}
+// ------------------- Frame with all of the text boxes and button ----------------------
+void MyFrame::frame_1(){
+        ////--------------------Sizer of the layout ---------------------------
     wxPanel* panel_inputs = new wxPanel (this, wxID_ANY); //That's the panel that will allocate the labels
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
@@ -79,6 +119,7 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "RESICO Calculator"){ //Creates the
     this -> Center();
 
 }
+//------------Calculate button clicked function -------------------
 void MyFrame::OnButtonClick(wxCommandEvent& event){
 
     double total_a_pagar = 0.0;
@@ -94,12 +135,11 @@ void MyFrame::OnButtonClick(wxCommandEvent& event){
     std::string total_a_pagar_sring = std::to_string(total_a_pagar);
     //- I print the value on the text box
     resultTextBox->SetValue(wxString::Format("El total a pagar: %.2f", total_a_pagar));
-
 }
-//Function to close the window 
-void MyFrame::OnExit(wxCommandEvent& event)
-{
-    Close(true);
+
+void MyFrame::OnAboutClick(wxCommandEvent& event){
+    wxMessageBox(_T("https://github.com/VALO64/RESICO-texes-calculator-c-UI"),
+                 _T("Information and newer versions on"), wxOK | wxICON_INFORMATION, this); //First argument will appear below the title, the second argument is the title
 }
 
 
