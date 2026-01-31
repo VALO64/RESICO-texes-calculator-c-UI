@@ -48,3 +48,9 @@ Tool bar with different options as select the pdf to make the program calculate 
 
 <img width="252" height="328" alt="imagen" src="https://github.com/user-attachments/assets/153933e2-9230-41a6-9507-f0fb3ed262c5" />
 
+-Version 1.2.1
+New button added but needs set new settings and conditions
+
+<img width="500" height="383" alt="image" src="https://github.com/user-attachments/assets/650f83e2-4a57-430e-be40-100934994aec" />
+
+
